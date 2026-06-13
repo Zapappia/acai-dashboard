@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Batedeira de Açaí — Painel</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap');
+
+  :root {
+    --roxo: #4A1259;
+    --roxo-claro: #7B2D8B;
+    --acai: #2D0A3F;
+    --acai-escuro: #1A0525;
+    --destaque: #C8F000;
+    --branco: #F5F0FF;
+    --cinza: #9B8FAA;
+    --borda: #3D1550;
+    --verde: #22C55E;
+    --vermelho: #EF4444;
+    --amarelo: #F59E0B;
+    --card-bg: #1E0830;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--acai-escuro);
+    color: var(--branco);
+    min-height: 100vh;
+  }
+
+  /* LOGIN */
+  #login-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at 50% 0%, #4A1259 0%, #1A0525 70%);
+  }
+
+  .login-box {
+    background: var(--card-bg);
+    border: 1px solid var(--borda);
+    border-radius: 16px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+  }
+
+  .login-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--destaque);
+    margin-bottom: 0.25rem;
+  }
+
+  .login-sub {
+    font-size: 0.8rem;
+    color: var(--cinza);
+    margin-bottom: 2rem;
+  }
+
+  .login-box input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--acai);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    color: var(--branco);
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    outline: none;
+  }
+
+  .login-box input:focus { border-color: var(--roxo-claro); }
+
+  .btn-login {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--destaque);
+    color: var(--acai-escuro);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+  }
+
+  .login-erro {
+    color: var(--vermelho);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    display: none;
+  }
+
+  /* DASHBOARD */
+  #dashboard { display: none; }
+
+  header {
+    background: var(--acai);
+    border-bottom: 1px solid var(--borda);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--destaque);
+  }
+
+  .btn-sair {
+    font-size: 0.8rem;
+    color: var(--cinza);
+    background: none;
+    border: 1px solid var(--borda);
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+  }
+
+  nav {
+    display: flex;
+    gap: 4px;
+    padding: 1rem 1.5rem 0;
+    border-bottom: 1px solid var(--borda);
+  }
+
+  .nav-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: none;
+    border: none;
+    color: var(--cinza);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+
+  .nav-btn.ativo {
+    color: var(--destaque);
+    border-bottom-color: var(--destaque);
+  }
+
+  main { padding: 1.5rem; max-width: 900px; margin: 0 auto; }
+
+  .tela { display: none; }
+  .tela.ativa { display: block; }
+
+  /* MÉTRICAS */
+  .metricas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .metrica {
+    background: var(--card-bg);
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+  }
+
+  .metrica-label {
+    font-size: 0.75rem;
+    color: var(--cinza);
+    margin-bottom: 4px;
+  }
+
+  .metrica-valor {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--destaque);
+  }
+
+  /* TABELA */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .card-titulo {
+    padding: 1rem 1.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--cinza);
+    border-bottom: 1px solid var(--borda);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    color: var(--cinza);
+    font-weight: 500;
+    font-size: 0.78rem;
+    border-bottom: 1px solid var(--borda);
+  }
+
+  td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--borda);
+    color: var(--branco);
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .badge-pendente { background: #3D2A00; color: var(--amarelo); }
+  .badge-finalizado { background: #0A2E1A; color: var(--verde); }
+
+  .btn-acao {
+    font-size: 0.78rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid;
+    cursor: pointer;
+    background: none;
+    font-weight: 500;
+  }
+
+  .btn-verde { border-color: var(--verde); color: var(--verde); }
+  .btn-vermelho { border-color: var(--vermelho); color: var(--vermelho); }
+
+  /* CARDÁPIO */
+  .preco-linha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--borda);
+  }
+
+  .preco-linha:last-child { border-bottom: none; }
+
+  .preco-nome { font-size: 0.9rem; color: var(--branco); }
+  .preco-num { font-size: 0.75rem; color: var(--cinza); margin-top: 2px; }
+
+  .preco-input {
+    width: 90px;
+    padding: 0.5rem 0.75rem;
+    background: var(--acai);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    color: var(--destaque);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: right;
+    outline: none;
+  }
+
+  .preco-input:focus { border-color: var(--roxo-claro); }
+
+  .btn-salvar {
+    display: block;
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--destaque);
+    color: var(--acai-escuro);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+
+  /* RELATÓRIOS */
+  .rel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .btn-pdf {
+    padding: 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    color: var(--branco);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .btn-pdf:hover { border-color: var(--destaque); color: var(--destaque); }
+  .btn-pdf span { display: block; font-size: 1.5rem; margin-bottom: 4px; }
+
+  .sel-periodo {
+    padding: 0.6rem 1rem;
+    background: var(--acai);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    color: var(--branco);
+    font-size: 0.85rem;
+    outline: none;
+    margin-right: 8px;
+  }
+
+  .aviso {
+    font-size: 0.8rem;
+    color: var(--cinza);
+    margin-bottom: 1rem;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--verde);
+    color: #000;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    display: none;
+    z-index: 999;
+  }
+
+  @media (max-width: 600px) {
+    .metricas { grid-template-columns: repeat(2, 1fr); }
+    .rel-grid { grid-template-columns: 1fr; }
+    th:nth-child(4), td:nth-child(4) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">🍇 Açaí</div>
+    <div class="login-sub">Painel do proprietário</div>
+    <input type="text" id="usuario" placeholder="Usuário" />
+    <input type="password" id="senha" placeholder="Senha" />
+    <button class="btn-login" onclick="fazerLogin()">Entrar</button>
+    <div class="login-erro" id="login-erro">Usuário ou senha incorretos.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <header>
+    <div class="logo">🍇 Batedeira de Açaí</div>
+    <button class="btn-sair" onclick="sair()">Sair</button>
+  </header>
+
+  <nav>
+    <button class="nav-btn ativo" onclick="irPara('pedidos', this)">Pedidos</button>
+    <button class="nav-btn" onclick="irPara('cardapio', this)">Cardápio</button>
+    <button class="nav-btn" onclick="irPara('relatorios', this)">Relatórios</button>
+  </nav>
+
+  <main>
+    <!-- PEDIDOS -->
+    <div id="tela-pedidos" class="tela ativa">
+      <div class="metricas">
+        <div class="metrica">
+          <div class="metrica-label">Pedidos hoje</div>
+          <div class="metrica-valor" id="total-pedidos">0</div>
+        </div>
+        <div class="metrica">
+          <div class="metrica-label">Pendentes</div>
+          <div class="metrica-valor" id="total-pendentes" style="color:#F59E0B">0</div>
+        </div>
+        <div class="metrica">
+          <div class="metrica-label">Total do dia</div>
+          <div class="metrica-valor" id="total-valor">R$ 0</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-titulo">Pedidos de hoje</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Item</th>
+              <th>Valor</th>
+              <th>Pagamento</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tabela-pedidos">
+            <tr><td colspan="6" style="color:var(--cinza);text-align:center;padding:2rem">Nenhum pedido ainda hoje.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CARDÁPIO -->
+    <div id="tela-cardapio" class="tela">
+      <div class="card">
+        <div class="card-titulo">Editar preços de hoje</div>
+        <div class="preco-linha">
+          <div><div class="preco-nome">Popular</div><div class="preco-num">Opção 1</div></div>
+          <input class="preco-input" type="number" id="p1" value="10.00" step="0.50" min="0">
+        </div>
+        <div class="preco-linha">
+          <div><div class="preco-nome">Médio</div><div class="preco-num">Opção 2</div></div>
+          <input class="preco-input" type="number" id="p2" value="13.00" step="0.50" min="0">
+        </div>
+        <div class="preco-linha">
+          <div><div class="preco-nome">Especial</div><div class="preco-num">Opção 3</div></div>
+          <input class="preco-input" type="number" id="p3" value="17.00" step="0.50" min="0">
+        </div>
+        <div class="preco-linha">
+          <div><div class="preco-nome">Farinha</div><div class="preco-num">Opção 4</div></div>
+          <input class="preco-input" type="number" id="p4" value="10.00" step="0.50" min="0">
+        </div>
+        <div class="preco-linha">
+          <div><div class="preco-nome">Camarão</div><div class="preco-num">Opção 5</div></div>
+          <input class="preco-input" type="number" id="p5" value="10.00" step="0.50" min="0">
+        </div>
+      </div>
+      <button class="btn-salvar" onclick="salvarPrecos()">Salvar preços</button>
+    </div>
+
+    <!-- RELATÓRIOS -->
+    <div id="tela-relatorios" class="tela">
+      <div class="rel-grid">
+        <button class="btn-pdf" onclick="gerarPDF('dia')">
+          <span>📄</span>Relatório do dia
+        </button>
+        <button class="btn-pdf" onclick="gerarPDF('semana')">
+          <span>📋</span>Relatório da semana
+        </button>
+      </div>
+      <div class="card">
+        <div class="card-titulo">Limpar dados</div>
+        <div style="padding:1.25rem">
+          <p class="aviso">Exclui pedidos finalizados do período selecionado. Esta ação não pode ser desfeita.</p>
+          <div style="display:flex;align-items:center;gap:8px">
+            <select class="sel-periodo" id="periodo-excluir">
+              <option value="hoje">Hoje</option>
+              <option value="semana">Esta semana</option>
+              <option value="tudo">Tudo</option>
+            </select>
+            <button class="btn-acao btn-vermelho" style="padding:8px 16px" onclick="excluirDados()">Excluir dados</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ===== LOGIN =====
+  const USUARIO = 'acai';
+  const SENHA = '1234';
+
+  function fazerLogin() {
+    const u = document.getElementById('usuario').value;
+    const s = document.getElementById('senha').value;
+    if (u === USUARIO && s === SENHA) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      carregarPedidos();
+    } else {
+      document.getElementById('login-erro').style.display = 'block';
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') fazerLogin();
+  });
+
+  function sair() {
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+
+  // ===== NAVEGAÇÃO =====
+  function irPara(tela, btn) {
+    document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('ativo'));
+    document.getElementById('tela-' + tela).classList.add('ativa');
+    btn.classList.add('ativo');
+  }
+
+  // ===== PEDIDOS =====
+  let pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+
+  function salvarPedidosLocal() {
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+  }
+
+  function carregarPedidos() {
+    renderizarPedidos();
+    atualizarMetricas();
+  }
+
+  function renderizarPedidos() {
+    const tbody = document.getElementById('tabela-pedidos');
+    const hoje = new Date().toDateString();
+    const pedidosHoje = pedidos.filter(p => new Date(p.data).toDateString() === hoje);
+
+    if (pedidosHoje.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="color:var(--cinza);text-align:center;padding:2rem">Nenhum pedido ainda hoje.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = pedidosHoje.map((p, i) => `
+      <tr id="row-${i}">
+        <td>${p.cliente}</td>
+        <td>${p.item}</td>
+        <td>R$ ${parseFloat(p.valor).toFixed(2).replace('.', ',')}</td>
+        <td>${p.pagamento}${p.troco ? ' / troco R$ ' + p.troco : ''}</td>
+        <td><span class="badge badge-${p.status}">${p.status === 'pendente' ? 'Pendente' : 'Finalizado'}</span></td>
+        <td>
+          ${p.status === 'pendente'
+            ? `<button class="btn-acao btn-verde" onclick="finalizarPedido(${i})">Finalizar</button>`
+            : `<button class="btn-acao btn-vermelho" onclick="excluirPedido(${i})">Excluir</button>`
+          }
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function atualizarMetricas() {
+    const hoje = new Date().toDateString();
+    const pedidosHoje = pedidos.filter(p => new Date(p.data).toDateString() === hoje);
+    const pendentes = pedidosHoje.filter(p => p.status === 'pendente').length;
+    const total = pedidosHoje.reduce((s, p) => s + parseFloat(p.valor), 0);
+
+    document.getElementById('total-pedidos').textContent = pedidosHoje.length;
+    document.getElementById('total-pendentes').textContent = pendentes;
+    document.getElementById('total-valor').textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+  }
+
+  function finalizarPedido(i) {
+    pedidos[i].status = 'finalizado';
+    salvarPedidosLocal();
+    renderizarPedidos();
+    atualizarMetricas();
+    mostrarToast('Pedido finalizado!');
+  }
+
+  function excluirPedido(i) {
+    pedidos.splice(i, 1);
+    salvarPedidosLocal();
+    renderizarPedidos();
+    atualizarMetricas();
+    mostrarToast('Pedido excluído.');
+  }
+
+  // ===== CARDÁPIO =====
+  let precos = JSON.parse(localStorage.getItem('precos') || 'null') || {p1:10,p2:13,p3:17,p4:10,p5:10};
+
+  function carregarPrecos() {
+    document.getElementById('p1').value = precos.p1;
+    document.getElementById('p2').value = precos.p2;
+    document.getElementById('p3').value = precos.p3;
+    document.getElementById('p4').value = precos.p4;
+    document.getElementById('p5').value = precos.p5;
+  }
+
+  carregarPrecos();
+
+  function salvarPrecos() {
+    precos = {
+      p1: parseFloat(document.getElementById('p1').value),
+      p2: parseFloat(document.getElementById('p2').value),
+      p3: parseFloat(document.getElementById('p3').value),
+      p4: parseFloat(document.getElementById('p4').value),
+      p5: parseFloat(document.getElementById('p5').value),
+    };
+    localStorage.setItem('precos', JSON.stringify(precos));
+    mostrarToast('Preços salvos!');
+  }
+
+  // ===== PDF =====
+  function gerarPDF(periodo) {
+    const hoje = new Date().toDateString();
+    const agora = new Date();
+    let lista = pedidos;
+
+    if (periodo === 'dia') {
+      lista = pedidos.filter(p => new Date(p.data).toDateString() === hoje);
+    } else {
+      const seteDias = new Date(agora - 7 * 24 * 60 * 60 * 1000);
+      lista = pedidos.filter(p => new Date(p.data) >= seteDias);
+    }
+
+    const total = lista.reduce((s, p) => s + parseFloat(p.valor), 0);
+    const titulo = periodo === 'dia' ? 'Relatório do Dia' : 'Relatório Semanal';
+    const data = agora.toLocaleDateString('pt-BR');
+
+    const html = `
+      <html><head><meta charset="UTF-8">
+      <style>
+        body { font-family: Arial, sans-serif; padding: 2rem; color: #111; }
+        h1 { color: #4A1259; margin-bottom: 0.25rem; }
+        .sub { color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { background: #4A1259; color: #fff; padding: 8px 10px; text-align: left; }
+        td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+        .total { text-align: right; font-weight: bold; margin-top: 1rem; font-size: 1rem; color: #4A1259; }
+      </style></head>
+      <body>
+        <h1>🍇 Batedeira de Açaí</h1>
+        <div class="sub">${titulo} — ${data}</div>
+        <table>
+          <thead><tr><th>Cliente</th><th>Item</th><th>Valor</th><th>Pagamento</th><th>Status</th></tr></thead>
+          <tbody>
+            ${lista.map(p => `<tr>
+              <td>${p.cliente}</td>
+              <td>${p.item}</td>
+              <td>R$ ${parseFloat(p.valor).toFixed(2).replace('.', ',')}</td>
+              <td>${p.pagamento}${p.troco ? ' / troco R$ ' + p.troco : ''}</td>
+              <td>${p.status}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+        <div class="total">Total: R$ ${total.toFixed(2).replace('.', ',')}</div>
+      </body></html>
+    `;
+
+    const janela = window.open('', '_blank');
+    janela.document.write(html);
+    janela.document.close();
+    janela.print();
+  }
+
+  // ===== LIMPAR DADOS =====
+  function excluirDados() {
+    const periodo = document.getElementById('periodo-excluir').value;
+    const agora = new Date();
+    const hoje = agora.toDateString();
+
+    if (periodo === 'hoje') {
+      pedidos = pedidos.filter(p => new Date(p.data).toDateString() !== hoje || p.status !== 'finalizado');
+    } else if (periodo === 'semana') {
+      const seteDias = new Date(agora - 7 * 24 * 60 * 60 * 1000);
+      pedidos = pedidos.filter(p => new Date(p.data) < seteDias || p.status !== 'finalizado');
+    } else {
+      pedidos = pedidos.filter(p => p.status !== 'finalizado');
+    }
+
+    salvarPedidosLocal();
+    renderizarPedidos();
+    atualizarMetricas();
+    mostrarToast('Dados excluídos.');
+  }
+
+  // ===== TOAST =====
+  function mostrarToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 2500);
+  }
+
+  // ===== SIMULAR PEDIDO (para teste) =====
+  // Descomente abaixo para adicionar um pedido de teste
+  // pedidos.push({cliente:'85 9 9999-0001',item:'Popular',valor:10,pagamento:'Pix',troco:null,status:'pendente',data:new Date().toISOString()});
+  // salvarPedidosLocal();
+</script>
+</body>
+</html>
